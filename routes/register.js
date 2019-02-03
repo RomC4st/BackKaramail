@@ -9,13 +9,26 @@ module.exports = {
     bcrypt.hash(pass, 5, (err, bcryptedPassword) => {
       console.log(pass);
       models.users
-        .findOrCreate({
+        .findOne({
           where: {
             login: login,
-            pass: bcryptedPassword
+          }
+        }).then(userFound => {
+          if (userFound) {
+            return res.sendStatus(409)
+          }
+          else {
+            models.users.findOrCreate({
+              where: {
+                login: login,
+                pass: bcryptedPassword
+              }
+            })
+            return res.sendStatus(200)
+
           }
         })
-        .then(res.status(200));
+
     });
   }
 };

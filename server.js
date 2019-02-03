@@ -21,6 +21,25 @@ models.sequelize.sync().then(() => {
 });
 
 app.use("/auth", auth);
+
+app.get('/messages/:id', (req, res) => {
+  let id = parseInt(req.params.id)
+  models.messages.findAll({
+    where: {
+      userId: id
+    }
+  })
+    .then(u => {
+      if (u.length > 0) {
+        res.status(200).json(u)
+      } else {
+        res.status(404).json(u)
+      }
+    })
+
+})
+
+
 app.get("/messages", (req, res) => {
   /*
   ////////////// SCRIPT POST Message ///////////////
