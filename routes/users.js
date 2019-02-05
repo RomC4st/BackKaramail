@@ -12,7 +12,9 @@ router.post('/UserId', (req, res) => {
 
 })
 
+
 router.post("/", log.register);
+router.post("/forgot", log.forgot);
 router.get("/", (req, res) => {
   /*
   ////////////// SCRIPT POST User //////////////////
