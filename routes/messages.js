@@ -3,20 +3,14 @@ const router = express.Router();
 const models = require("../../models");
 
 router.get('/:id', (req, res) => {
-  let id = parseInt(req.params.id)
+  let id = req.params.id
   models.messages.findAll({
     where: {
       userId: id
     }
+  }).then(u => {
+    res.status(200).json(u)
   })
-    .then(u => {
-      if (u.length > 0) {
-        res.status(200).json(u)
-      } else {
-        res.status(404).json(u)
-      }
-    })
-
 })
 
 router.post("/", (req, res) => {
@@ -25,28 +19,27 @@ router.post("/", (req, res) => {
   console.log(req.body);
   const formData = req.body;
   const newMessage = new models.messages(formData);
-
   newMessage.save();
 });
 
 router.delete('/:id(\\d+)', (req, res) => {
+  const id = req.params.id
   models.messages
-    .findById(req.params.id)
+    .findByPk(id)
     .then(MessageFound => {
       if (MessageFound) {
         models.messages.destroy({
           where: {
-            id: req.params.id
+            id: id
           }
-        }).then(result => {
-            res.status(200)
+        }).then(() => {
+          return res.sendStatus(200)
         })
       }
       else {
-        return res.status(404)
+        return res.sendStatus(404)
       }
     })
-
 })
 
 router.get("/", (req, res) => {
