@@ -29,6 +29,26 @@ router.post("/", (req, res) => {
   newMessage.save();
 });
 
+router.delete('/:id(\\d+)', (req, res) => {
+  models.messages
+    .findById(req.params.id)
+    .then(MessageFound => {
+      if (MessageFound) {
+        models.messages.destroy({
+          where: {
+            id: req.params.id
+          }
+        }).then(result => {
+            res.status(200)
+        })
+      }
+      else {
+        return res.status(404)
+      }
+    })
+
+})
+
 router.get("/", (req, res) => {
   /*
   ////////////// SCRIPT POST Message ///////////////
