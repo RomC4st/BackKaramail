@@ -42,6 +42,27 @@ router.delete('/:id(\\d+)', (req, res) => {
     })
 })
 
+router.put('/:id(\\d+)', (req, res) => {
+  const id = req.params.id
+  models.messages
+    .findByPk(id)
+    .then(MessageFound => {
+      const data = req.body
+      if (MessageFound) {
+        console.log(data)
+        models.messages.update(data, {
+          where: { id: id }
+        }).then(() => {
+          return res.sendStatus(200)
+        })
+      } else {
+        return res.sendStatus(404)
+      }
+    })
+
+
+})
+
 router.get("/", (req, res) => {
   /*
   ////////////// SCRIPT POST Message ///////////////
